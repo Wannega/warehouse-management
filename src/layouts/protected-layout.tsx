@@ -9,21 +9,21 @@ interface Props {
 }
 
 export const ProtectedLayout: React.FC<Props> = ({ children }) => {
-  // const { data, loading, called } = useGetMeQuery();
-  // const navigate = useNavigate();
+  const { data, loading, called } = useGetMeQuery();
+  const navigate = useNavigate();
 
-  // const token = Cookies.get('access-token');
-  // if (!token) {
-  //   navigate(Routes.SIGN_IN);
-  // }
+  const token = Cookies.get('access-token');
+  if (!token) {
+    navigate(Routes.SIGN_IN);
+  }
 
-  // useEffect(() => {
-  //   if (!data?.me?.id && !loading && called) {
-  //     navigate(Routes.SIGN_IN);
-  //   }
-  // }, [called, data?.me?.id, loading, navigate]);
+  useEffect(() => {
+    if (!data?.me?.id && !loading && called) {
+      navigate(Routes.SIGN_IN);
+    }
+  }, [called, data?.me?.id, loading, navigate]);
 
-  // if(loading && called && !data) return <></>
+  if(loading && called && !data) return <></>
 
   return <>{children}</>;
 };

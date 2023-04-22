@@ -1,7 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli'
  
 const config: CodegenConfig = {
-  schema: 'http://0.0.0.0:1337/graphql/',
+  schema: 'https://wms-backend-6og4.onrender.com/graphql',
   documents: ['src/schemas/**/*.graphql'],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
