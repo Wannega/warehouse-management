@@ -6,7 +6,7 @@ import ProductsTable from './table';
 
 export const ProductsPage: React.FC = () => {
   return (
-    <WorkspaceLayout title={'Продукты'}>
+    <WorkspaceLayout title={'Товары'}>
       <Container sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>

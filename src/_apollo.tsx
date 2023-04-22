@@ -8,11 +8,11 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
 import { onError } from '@apollo/client/link/error';
-import { Router, redirect, useNavigate } from 'react-router';
+import { redirect } from 'react-router';
 import { Routes } from './routes';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:1337/graphql',
+  uri: import.meta.env.VITE_API_URL,
 });
 
 const errorLink = onError(({ graphQLErrors, networkError, response }) => {
@@ -58,7 +58,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  uri: 'http://localhost:1337/graphql',
+  uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
   link: cookieLink.concat(errorLink.concat(authLink.concat(httpLink))),
 });

@@ -9,7 +9,7 @@ import {
 import { SignInPage } from './pages/sign-in';
 
 import { GlobalStyle } from './styles/global';
-import { ThemeProvider } from '@mui/material';
+import { Box, ThemeProvider, Typography } from '@mui/material';
 import { lightTheme } from './themes/theme';
 import { ApolloInitProvider } from './_apollo';
 
@@ -64,6 +64,33 @@ const router = createBrowserRouter([
   {
     path: Routes.RESET_PASSWORD,
     element: <ResetPasswordPage />,
+  },
+  {
+    path: '*',
+    element: (
+      <Box
+        display={'flex'}
+        justifyContent={'center'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        position={'absolute'}
+        left={0}
+        right={0}
+        top={0}
+        bottom={0}
+      >
+        <Box>
+          <Typography variant="h1" fontWeight={'medium'} color="primary.main">
+            404
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="h5" color="primary.main">
+            Page not found
+          </Typography>
+        </Box>
+      </Box>
+    ),
   },
   {
     path: Routes.PRODUCTS,
