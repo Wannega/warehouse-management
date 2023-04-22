@@ -1,0 +1,42 @@
+query getInvoices(
+  $filters: InvoiceFiltersInput!
+  $pag: PaginationArg = {}
+  $sort: [String] = []
+) {
+  invoices(filters: $filters, pagination: $pag, sort: $sort) {
+    data {
+      id
+      attributes {
+        amount
+        article
+        provider {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        contragent {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        createdAt
+        deliveryDate
+        name
+      }
+    }
+    meta {
+      pagination {
+        page
+        pageSize
+        pageCount
+        total
+      }
+    }
+  }
+}

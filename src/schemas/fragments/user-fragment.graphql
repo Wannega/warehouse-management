@@ -1,0 +1,10 @@
+fragment UserFragment on UsersPermissionsMe {
+  id
+  username
+  email
+  confirmed
+  blocked
+  role {
+    name
+  }
+}

@@ -1,0 +1,7 @@
+mutation createProvider($data: ProviderInput!) {
+  createProvider(data: $data) {
+    data {
+      id
+    }
+  }
+}

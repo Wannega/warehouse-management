@@ -1,0 +1,7 @@
+mutation deleteContragent($id: ID!){
+  deleteContragent(id:$id){
+    data{
+      id
+    }
+  }
+}

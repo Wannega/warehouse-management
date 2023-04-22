@@ -1,0 +1,7 @@
+mutation createContragent($data: ContragentInput!) {
+  createContragent(data: $data) {
+    data {
+      id
+    }
+  }
+}

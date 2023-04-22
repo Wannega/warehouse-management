@@ -1,0 +1,7 @@
+mutation deleteProvider($id: ID!){
+  deleteProvider(id:$id){
+    data{
+      id
+    }
+  }
+}

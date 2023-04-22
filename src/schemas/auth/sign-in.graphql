@@ -1,0 +1,8 @@
+mutation signIn($input: UsersPermissionsLoginInput!) {
+  login(input: $input) {
+    jwt
+    user {
+      ...UserFragment
+    }
+  }
+}

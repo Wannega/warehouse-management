@@ -1,0 +1,19 @@
+query getProviders(
+  $filters: ProviderFiltersInput!
+  $pag: PaginationArg = {}
+  $sort: [String] = []
+) {
+  providers(filters: $filters, pagination: $pag, sort: $sort) {
+    data {
+      id
+      attributes {
+        name
+        category
+        location
+        inn
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}

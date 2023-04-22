@@ -1,0 +1,7 @@
+mutation updateProvider($id: ID!,$data: ProviderInput!){
+  updateProvider(id: $id, data: $data){
+    data{
+      id
+    }
+  }
+}

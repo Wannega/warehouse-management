@@ -1,0 +1,7 @@
+mutation createInvoice($data: InvoiceInput!){
+  createInvoice(data: $data){
+    data{
+      id
+    }
+  }
+}

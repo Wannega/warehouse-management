@@ -1,0 +1,7 @@
+mutation updateContragent($id: ID!,$data: ContragentInput!){
+  updateContragent(id: $id, data: $data){
+    data{
+      id
+    }
+  }
+}

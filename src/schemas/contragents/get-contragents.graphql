@@ -1,0 +1,19 @@
+query getContragents(
+  $filters: ContragentFiltersInput!
+  $pag: PaginationArg = {}
+  $sort: [String] = []
+) {
+  contragents(filters: $filters, pagination: $pag, sort: $sort) {
+    data {
+      id
+      attributes {
+        name
+        category
+        location
+        inn
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
