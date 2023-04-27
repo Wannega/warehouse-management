@@ -17,7 +17,7 @@ import {
   useUpdateProviderMutation,
 } from 'src/schemas/generated';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { CreateProviderModal } from './create-modal';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -101,6 +101,10 @@ export default function ProvidersTable() {
     });
     refetch();
   };
+
+  useEffect(() => {
+    refetch();
+  });
 
   const toggleModal = () => {
     setOpen((state) => !state);

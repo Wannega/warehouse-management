@@ -17,7 +17,7 @@ import {
   useUpdateContragentMutation,
 } from 'src/schemas/generated';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { CreateProviderModal } from './create-modal';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -61,7 +61,7 @@ export default function ContragentsTable() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selected, setSelected] = useState<any[]>([]);
 
-  const { data, called, loading, refetch } = useGetContragentsQuery({
+  const { data, called, loading, refetch, reobserve } = useGetContragentsQuery({
     variables: {
       filters: { name: { contains: '' } },
       pag: { page: 1, pageSize: 500 },
@@ -87,6 +87,7 @@ export default function ContragentsTable() {
       })
     );
     refetch();
+    reobserve()
   };
 
   const handleUpdate = (
@@ -107,7 +108,12 @@ export default function ContragentsTable() {
       },
     });
     refetch();
+    reobserve()
   };
+
+  useEffect(() => {
+    refetch();
+  });
 
   const toggleModal = () => {
     setOpen((state) => !state);

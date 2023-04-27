@@ -14,7 +14,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  I18NLocaleCode: any;
   JSON: any;
   Upload: any;
 };
@@ -41,72 +40,6 @@ export type BooleanFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['Boolean']>>>;
   startsWith?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type Contact = {
-  __typename?: 'Contact';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  email?: Maybe<Scalars['String']>;
-  icon?: Maybe<UploadFileEntityResponse>;
-  locale?: Maybe<Scalars['String']>;
-  localizations?: Maybe<ContactRelationResponseCollection>;
-  name?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-
-export type ContactLocalizationsArgs = {
-  filters?: InputMaybe<ContactFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type ContactEntity = {
-  __typename?: 'ContactEntity';
-  attributes?: Maybe<Contact>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type ContactEntityResponse = {
-  __typename?: 'ContactEntityResponse';
-  data?: Maybe<ContactEntity>;
-};
-
-export type ContactEntityResponseCollection = {
-  __typename?: 'ContactEntityResponseCollection';
-  data: Array<ContactEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type ContactFiltersInput = {
-  and?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  email?: InputMaybe<StringFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<ContactFiltersInput>;
-  name?: InputMaybe<StringFilterInput>;
-  not?: InputMaybe<ContactFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
-  phone?: InputMaybe<StringFilterInput>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type ContactInput = {
-  email?: InputMaybe<Scalars['String']>;
-  icon?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type ContactRelationResponseCollection = {
-  __typename?: 'ContactRelationResponseCollection';
-  data: Array<ContactEntity>;
 };
 
 export type Contragent = {
@@ -180,47 +113,6 @@ export type DateTimeFilterInput = {
   startsWith?: InputMaybe<Scalars['DateTime']>;
 };
 
-export type Dictionary = {
-  __typename?: 'Dictionary';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  name: Scalars['String'];
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type DictionaryEntity = {
-  __typename?: 'DictionaryEntity';
-  attributes?: Maybe<Dictionary>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type DictionaryEntityResponse = {
-  __typename?: 'DictionaryEntityResponse';
-  data?: Maybe<DictionaryEntity>;
-};
-
-export type DictionaryEntityResponseCollection = {
-  __typename?: 'DictionaryEntityResponseCollection';
-  data: Array<DictionaryEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type DictionaryFiltersInput = {
-  and?: InputMaybe<Array<InputMaybe<DictionaryFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  name?: InputMaybe<StringFilterInput>;
-  not?: InputMaybe<DictionaryFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<DictionaryFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type DictionaryInput = {
-  name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
 export type FileInfoInput = {
   alternativeText?: InputMaybe<Scalars['String']>;
   caption?: InputMaybe<Scalars['String']>;
@@ -251,7 +143,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = Contact | Contragent | Dictionary | I18NLocale | Invoice | Product | Provider | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Contragent | I18NLocale | Invoice | Provider | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -343,6 +235,7 @@ export type Invoice = {
   article?: Maybe<Scalars['String']>;
   contragent?: Maybe<ContragentEntityResponse>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  delivered?: Maybe<Scalars['Boolean']>;
   deliveryDate?: Maybe<Scalars['DateTime']>;
   name?: Maybe<Scalars['String']>;
   provider?: Maybe<ProviderEntityResponse>;
@@ -372,6 +265,7 @@ export type InvoiceFiltersInput = {
   article?: InputMaybe<StringFilterInput>;
   contragent?: InputMaybe<ContragentFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  delivered?: InputMaybe<BooleanFilterInput>;
   deliveryDate?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   name?: InputMaybe<StringFilterInput>;
@@ -385,6 +279,7 @@ export type InvoiceInput = {
   amount?: InputMaybe<Scalars['Int']>;
   article?: InputMaybe<Scalars['String']>;
   contragent?: InputMaybe<Scalars['ID']>;
+  delivered?: InputMaybe<Scalars['Boolean']>;
   deliveryDate?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   provider?: InputMaybe<Scalars['ID']>;
@@ -418,25 +313,17 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Change user password. Confirm with the current password. */
   changePassword?: Maybe<UsersPermissionsLoginPayload>;
-  createContact?: Maybe<ContactEntityResponse>;
-  createContactLocalization?: Maybe<ContactEntityResponse>;
   createContragent?: Maybe<ContragentEntityResponse>;
-  createDictionary?: Maybe<DictionaryEntityResponse>;
   createInvoice?: Maybe<InvoiceEntityResponse>;
-  createProduct?: Maybe<ProductEntityResponse>;
   createProvider?: Maybe<ProviderEntityResponse>;
-  createProviderLocalization?: Maybe<ProviderEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
   /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
-  deleteContact?: Maybe<ContactEntityResponse>;
   deleteContragent?: Maybe<ContragentEntityResponse>;
-  deleteDictionary?: Maybe<DictionaryEntityResponse>;
   deleteInvoice?: Maybe<InvoiceEntityResponse>;
-  deleteProduct?: Maybe<ProductEntityResponse>;
   deleteProvider?: Maybe<ProviderEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -455,12 +342,9 @@ export type Mutation = {
   removeFile?: Maybe<UploadFileEntityResponse>;
   /** Reset user password. Confirm with a code (resetToken from forgotPassword) */
   resetPassword?: Maybe<UsersPermissionsLoginPayload>;
-  updateContact?: Maybe<ContactEntityResponse>;
   updateContragent?: Maybe<ContragentEntityResponse>;
-  updateDictionary?: Maybe<DictionaryEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateInvoice?: Maybe<InvoiceEntityResponse>;
-  updateProduct?: Maybe<ProductEntityResponse>;
   updateProvider?: Maybe<ProviderEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -479,26 +363,8 @@ export type MutationChangePasswordArgs = {
 };
 
 
-export type MutationCreateContactArgs = {
-  data: ContactInput;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
-export type MutationCreateContactLocalizationArgs = {
-  data?: InputMaybe<ContactInput>;
-  id?: InputMaybe<Scalars['ID']>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
 export type MutationCreateContragentArgs = {
   data: ContragentInput;
-};
-
-
-export type MutationCreateDictionaryArgs = {
-  data: DictionaryInput;
 };
 
 
@@ -507,21 +373,8 @@ export type MutationCreateInvoiceArgs = {
 };
 
 
-export type MutationCreateProductArgs = {
-  data: ProductInput;
-};
-
-
 export type MutationCreateProviderArgs = {
   data: ProviderInput;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
-export type MutationCreateProviderLocalizationArgs = {
-  data?: InputMaybe<ProviderInput>;
-  id?: InputMaybe<Scalars['ID']>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
 
@@ -545,18 +398,7 @@ export type MutationCreateUsersPermissionsUserArgs = {
 };
 
 
-export type MutationDeleteContactArgs = {
-  id: Scalars['ID'];
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
 export type MutationDeleteContragentArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationDeleteDictionaryArgs = {
   id: Scalars['ID'];
 };
 
@@ -566,14 +408,8 @@ export type MutationDeleteInvoiceArgs = {
 };
 
 
-export type MutationDeleteProductArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type MutationDeleteProviderArgs = {
   id: Scalars['ID'];
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
 
@@ -637,21 +473,8 @@ export type MutationResetPasswordArgs = {
 };
 
 
-export type MutationUpdateContactArgs = {
-  data: ContactInput;
-  id: Scalars['ID'];
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
 export type MutationUpdateContragentArgs = {
   data: ContragentInput;
-  id: Scalars['ID'];
-};
-
-
-export type MutationUpdateDictionaryArgs = {
-  data: DictionaryInput;
   id: Scalars['ID'];
 };
 
@@ -668,16 +491,9 @@ export type MutationUpdateInvoiceArgs = {
 };
 
 
-export type MutationUpdateProductArgs = {
-  data: ProductInput;
-  id: Scalars['ID'];
-};
-
-
 export type MutationUpdateProviderArgs = {
   data: ProviderInput;
   id: Scalars['ID'];
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
 
@@ -728,61 +544,14 @@ export type PaginationArg = {
   start?: InputMaybe<Scalars['Int']>;
 };
 
-export type Product = {
-  __typename?: 'Product';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  name?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type ProductEntity = {
-  __typename?: 'ProductEntity';
-  attributes?: Maybe<Product>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type ProductEntityResponse = {
-  __typename?: 'ProductEntityResponse';
-  data?: Maybe<ProductEntity>;
-};
-
-export type ProductEntityResponseCollection = {
-  __typename?: 'ProductEntityResponseCollection';
-  data: Array<ProductEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type ProductFiltersInput = {
-  and?: InputMaybe<Array<InputMaybe<ProductFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  name?: InputMaybe<StringFilterInput>;
-  not?: InputMaybe<ProductFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<ProductFiltersInput>>>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type ProductInput = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
 export type Provider = {
   __typename?: 'Provider';
   category?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   inn?: Maybe<Scalars['String']>;
-  locale?: Maybe<Scalars['String']>;
-  localizations?: Maybe<ProviderRelationResponseCollection>;
   location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-
-export type ProviderLocalizationsArgs = {
-  filters?: InputMaybe<ProviderFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type ProviderEntity = {
@@ -808,8 +577,6 @@ export type ProviderFiltersInput = {
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   inn?: InputMaybe<StringFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<ProviderFiltersInput>;
   location?: InputMaybe<StringFilterInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ProviderFiltersInput>;
@@ -824,31 +591,15 @@ export type ProviderInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
-export type ProviderRelationResponseCollection = {
-  __typename?: 'ProviderRelationResponseCollection';
-  data: Array<ProviderEntity>;
-};
-
-export enum PublicationState {
-  Live = 'LIVE',
-  Preview = 'PREVIEW'
-}
-
 export type Query = {
   __typename?: 'Query';
-  contact?: Maybe<ContactEntityResponse>;
-  contacts?: Maybe<ContactEntityResponseCollection>;
   contragent?: Maybe<ContragentEntityResponse>;
   contragents?: Maybe<ContragentEntityResponseCollection>;
-  dictionaries?: Maybe<DictionaryEntityResponseCollection>;
-  dictionary?: Maybe<DictionaryEntityResponse>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   invoice?: Maybe<InvoiceEntityResponse>;
   invoices?: Maybe<InvoiceEntityResponseCollection>;
   me?: Maybe<UsersPermissionsMe>;
-  product?: Maybe<ProductEntityResponse>;
-  products?: Maybe<ProductEntityResponseCollection>;
   provider?: Maybe<ProviderEntityResponse>;
   providers?: Maybe<ProviderEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
@@ -862,21 +613,6 @@ export type Query = {
 };
 
 
-export type QueryContactArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-};
-
-
-export type QueryContactsArgs = {
-  filters?: InputMaybe<ContactFiltersInput>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
 export type QueryContragentArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
@@ -886,19 +622,6 @@ export type QueryContragentsArgs = {
   filters?: InputMaybe<ContragentFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-export type QueryDictionariesArgs = {
-  filters?: InputMaybe<DictionaryFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-export type QueryDictionaryArgs = {
-  id?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -926,27 +649,13 @@ export type QueryInvoicesArgs = {
 };
 
 
-export type QueryProductArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-
-export type QueryProductsArgs = {
-  filters?: InputMaybe<ProductFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
 export type QueryProviderArgs = {
   id?: InputMaybe<Scalars['ID']>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
 
 export type QueryProvidersArgs = {
   filters?: InputMaybe<ProviderFiltersInput>;
-  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -1483,7 +1192,7 @@ export type GetInvoicesQueryVariables = Exact<{
 }>;
 
 
-export type GetInvoicesQuery = { __typename?: 'Query', invoices?: { __typename?: 'InvoiceEntityResponseCollection', data: Array<{ __typename?: 'InvoiceEntity', id?: string | null, attributes?: { __typename?: 'Invoice', amount?: number | null, article?: string | null, createdAt?: any | null, deliveryDate?: any | null, name?: string | null, provider?: { __typename?: 'ProviderEntityResponse', data?: { __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', name?: string | null } | null } | null } | null, contragent?: { __typename?: 'ContragentEntityResponse', data?: { __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
+export type GetInvoicesQuery = { __typename?: 'Query', invoices?: { __typename?: 'InvoiceEntityResponseCollection', data: Array<{ __typename?: 'InvoiceEntity', id?: string | null, attributes?: { __typename?: 'Invoice', amount?: number | null, article?: string | null, delivered?: boolean | null, createdAt?: any | null, deliveryDate?: any | null, name?: string | null, provider?: { __typename?: 'ProviderEntityResponse', data?: { __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', name?: string | null } | null } | null } | null, contragent?: { __typename?: 'ContragentEntityResponse', data?: { __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
 export type UpdateInvoiceMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1912,6 +1621,7 @@ export const GetInvoicesDocument = gql`
       attributes {
         amount
         article
+        delivered
         provider {
           data {
             id

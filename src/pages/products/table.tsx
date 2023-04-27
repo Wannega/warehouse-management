@@ -16,7 +16,7 @@ import {
   useUpdateInvoiceMutation,
 } from 'src/schemas/generated';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { CreateProductModal } from './create-modal';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -54,6 +54,14 @@ const columns: GridColDef<InvoiceEntity>[] = [
     valueGetter: (params) => params.row.attributes?.amount,
   },
   {
+    field: 'delivered',
+    headerName: 'Доставлен',
+    width: 150,
+    type: 'boolean',
+    editable: true,
+    valueGetter: (params) => params.row.attributes?.delivered,
+  },
+  {
     field: 'deliveryDate',
     headerName: 'Дата отправки',
     width: 150,
@@ -79,7 +87,7 @@ export default function ProductsTable() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selected, setSelected] = useState<any[]>([]);
 
-  const { data, called, loading, refetch } = useGetInvoicesQuery({
+  const { data, called, loading, refetch, reobserve } = useGetInvoicesQuery({
     variables: {
       filters: { name: { contains: '' } },
       pag: { page: 1, pageSize: 500 },
@@ -99,6 +107,7 @@ export default function ProductsTable() {
       })
     );
     refetch();
+    reobserve();
   };
 
   const handleUpdate = (
@@ -109,19 +118,25 @@ export default function ProductsTable() {
       pick({ ...params, amount: params.amount && parseInt(params.amount) }, [
         'name',
         'amount',
+        'delivered',
       ]),
       isNil
     ); // {b: 'Hello', c: 3}
 
-    console.log(update);
     updateEntity({
       variables: {
         id: params.id ?? '',
         data: update,
       },
     });
+
     refetch();
+    reobserve();
   };
+
+  useEffect(() => {
+    refetch();
+  });
 
   const toggleModal = () => {
     setOpen((state) => !state);
