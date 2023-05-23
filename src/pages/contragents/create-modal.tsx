@@ -103,7 +103,6 @@ export const CreateProviderModal: React.FC = () => {
           <TextField
             name={name}
             value={value}
-            type="number"
             onChange={onChange}
             id="outlined-select-currency"
             label="ИНН"
@@ -118,7 +117,6 @@ export const CreateProviderModal: React.FC = () => {
           <TextField
             name={name}
             value={value}
-            type="number"
             onChange={onChange}
             id="outlined-select-currency"
             label="Категория"

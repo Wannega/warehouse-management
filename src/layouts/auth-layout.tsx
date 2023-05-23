@@ -21,7 +21,7 @@ export const AuthLayout: React.FC<Props> = ({ children }) => {
         sm={4}
         md={8}
         sx={{
-          backgroundImage: 'url(https://img.freepik.com/free-photo/landmarks-of-modern-city_1359-338.jpg?w=1380&t=st=1682156343~exp=1682156943~hmac=40bfbe38266480cd077bb862b22d73bf4874b50c61555a904bb8567d8724b4cf)',
+          backgroundImage: 'url(https://mail.pamushagroup.com/wp-content/uploads/2016/08/architecture-blue-building-business-41170.jpg)',
           backgroundRepeat: 'no-repeat',
           backgroundColor: (t) =>
             t.palette.mode === 'light'

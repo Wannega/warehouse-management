@@ -1,4 +1,4 @@
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -17,7 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Cookies from 'js-cookie';
-import { Link, redirect, useLocation, useNavigate } from 'react-router-dom';
+import { Link,  useLocation, useNavigate } from 'react-router-dom';
 import { Routes } from 'src/routes';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -32,6 +32,13 @@ const routes = [
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
+}
+
+function clear_all_cookies() {
+  document.cookie.split(";").forEach(function (cookie) { 
+    document.cookie = ""; 
+});
+  window.location.reload()
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -93,6 +100,7 @@ export const WorkspaceLayout: React.FC<Props> = ({ children, title }) => {
   };
 
   const handleLogout = () => {
+    clear_all_cookies()
     Cookies.remove('access-token');
     navigate(Routes.SIGN_IN)
   };

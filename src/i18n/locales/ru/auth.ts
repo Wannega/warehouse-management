@@ -1,5 +1,7 @@
 import { AuthKeysLabels } from 'src/types/i18n/types';
 
+
+// Ключи переводов на русский язык
 export const auth: AuthKeysLabels = {
   email: 'Почта',
   password: 'Пароль',

@@ -11,18 +11,14 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTranslationAuth } from 'src/hooks/use-translation';
-import {
-  Link as DOMLink,
-  Navigate,
-  redirect,
-  useNavigate,
-} from 'react-router-dom';
+import { Link as DOMLink, useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Alert, Stack } from '@mui/material';
 import { AuthLayout } from 'src/layouts/auth-layout';
-import { useGetMeQuery, useSignInMutation } from 'src/schemas/generated';
+import { useSignInMutation } from 'src/schemas/generated';
 import { Routes } from 'src/routes';
-import { useEffect } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useState } from 'react';
 
 interface FormValues {
   email: string;
@@ -39,28 +35,33 @@ const initialFormValues: FormValues = {
 export const SignInPage: React.FC = () => {
   const { t } = useTranslationAuth();
   const [signIn, { loading, error }] = useSignInMutation();
-  const { data, called, loading: meLoading } = useGetMeQuery();
+  const [isCaptchaVisible, setVisible] = useState(false);
+  const [isCaptchaPassed, setPassed] = useState(false);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (called && !meLoading && data?.me?.id) {
-  //     navigate(Routes.PRODUCTS);
-  //   }
-  // }, [called, data?.me?.id, meLoading, navigate]);
 
   const {
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: initialFormValues,
   });
 
-  const handleFormSubmit = (data: FormValues) =>
+  const handleFormSubmit = () => {
     signIn({
-      variables: { input: { identifier: data.email, password: data.password } },
-    }).then(()=>navigate(Routes.PRODUCTS));
-
+      variables: {
+        input: {
+          identifier: getValues().email,
+          password: getValues().password,
+        },
+      },
+    }).then(() => {
+      setPassed(false);
+      setVisible(false);
+      navigate(Routes.PRODUCTS);
+    });
+  };
 
   return (
     <AuthLayout>
@@ -91,7 +92,15 @@ export const SignInPage: React.FC = () => {
         <Box
           component="form"
           noValidate
-          onSubmit={handleSubmit(handleFormSubmit)}
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            setVisible(true);
+
+            if(isCaptchaPassed){
+              handleFormSubmit();
+            }
+          }}
           sx={{ mt: 1 }}
         >
           <Controller
@@ -106,6 +115,7 @@ export const SignInPage: React.FC = () => {
                 fullWidth
                 label={t('email')}
                 name={name}
+                type="email"
                 autoComplete="email"
                 autoFocus
                 value={value}
@@ -126,6 +136,7 @@ export const SignInPage: React.FC = () => {
                 label={t('password')}
                 name={name}
                 autoComplete="password"
+                type="password"
                 value={value}
                 onChange={onChange}
               />
@@ -153,6 +164,14 @@ export const SignInPage: React.FC = () => {
             {t('sign-in')}
           </Button>
 
+          {isCaptchaVisible && (
+            <ReCAPTCHA
+              onChange={() => {
+                setPassed(true)
+              }}
+              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            />
+          )}
           {loading && (
             <LinearProgress
               style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}

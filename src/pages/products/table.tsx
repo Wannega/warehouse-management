@@ -23,6 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { InvoiceEntity } from 'src/schemas/generated';
 import { isNil, omitBy, pick } from 'lodash';
 
+// Данные о колонках таблицы накладных
 const columns: GridColDef<InvoiceEntity>[] = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
@@ -34,7 +35,7 @@ const columns: GridColDef<InvoiceEntity>[] = [
   },
   {
     field: 'article',
-    headerName: 'Артикль',
+    headerName: 'Артикул',
     width: 150,
     valueGetter: (params) => params.row.attributes?.article,
   },
@@ -98,9 +99,11 @@ export default function ProductsTable() {
   const [deleteEntity] = useDeleteInvoiceMutation({ fetchPolicy: 'no-cache' });
   const [updateEntity] = useUpdateInvoiceMutation({ fetchPolicy: 'no-cache' });
 
+  // Запрос на удаление сущности из базы данных
   const handleDelete = () => {
     selected.map((number) =>
       deleteEntity({
+        // Тело запроса
         variables: {
           id: data?.invoices?.data.find((item) => item.id === number)?.id ?? '',
         },
@@ -110,10 +113,12 @@ export default function ProductsTable() {
     reobserve();
   };
 
+  // Запрос на обновление сущности в базе данных
   const handleUpdate = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: GridCellEditStopParams<any, any, any>['row']
   ) => {
+    // Фильтрация по пустым полям
     const update = omitBy(
       pick({ ...params, amount: params.amount && parseInt(params.amount) }, [
         'name',
@@ -121,9 +126,10 @@ export default function ProductsTable() {
         'delivered',
       ]),
       isNil
-    ); // {b: 'Hello', c: 3}
+    );
 
     updateEntity({
+      // Тело запроса
       variables: {
         id: params.id ?? '',
         data: update,

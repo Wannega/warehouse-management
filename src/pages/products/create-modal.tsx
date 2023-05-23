@@ -40,7 +40,9 @@ export const CreateProductModal: React.FC = () => {
 
   const [createEntity, { data, loading, error }] = useCreateInvoiceMutation({fetchPolicy: 'no-cache'});
 
+  // Результат выполнения запроса
   const { data: contragents } = useGetContragentsQuery({
+    // Тело запроса
     variables: {
       filters: { name: { contains: '' } },
       pag: { page: 1, pageSize: 500 },
@@ -54,8 +56,10 @@ export const CreateProductModal: React.FC = () => {
   });
 
   const handleFormSubmit = (form: FormProps) =>
+  // Запрос на создание сущности в базе данных
     createEntity({
       variables: {
+        // Данные формы
         data: {
           ...form,
           amount: Number(form.amount),
@@ -65,6 +69,7 @@ export const CreateProductModal: React.FC = () => {
               (item) => item.attributes?.name === form.contragent
             )?.id ?? '',
           provider:
+          // Поиск по поставщикам
             providers?.providers?.data.find(
               (item) => item.attributes?.name === form.provider
             )?.id ?? '',

@@ -9,6 +9,7 @@ interface Props {
 }
 
 export const ProtectedLayout: React.FC<Props> = ({ children }) => {
+  // Данные о пользователе
   const { data, loading, called } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -17,6 +18,7 @@ export const ProtectedLayout: React.FC<Props> = ({ children }) => {
     navigate(Routes.SIGN_IN);
   }
 
+  // Если нет данных о пользователе, то возврат на страницу авторизации
   useEffect(() => {
     if (!data?.me?.id && !loading && called) {
       navigate(Routes.SIGN_IN);
