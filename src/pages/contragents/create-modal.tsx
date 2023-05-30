@@ -9,7 +9,11 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { Controller, useForm } from 'react-hook-form';
-import { useCreateContragentMutation, useCreateProviderMutation } from 'src/schemas/generated';
+import {
+  useCreateContactMutation,
+  useCreateContragentMutation,
+  useCreateProviderMutation,
+} from 'src/schemas/generated';
 
 interface FormProps {
   name: string;
@@ -18,7 +22,7 @@ interface FormProps {
   category: string;
 }
 
-export const CreateProviderModal: React.FC = () => {
+export const CreateContragentsModal: React.FC = () => {
   const { control, handleSubmit } = useForm<FormProps>({
     defaultValues: {
       location: '',
@@ -31,19 +35,22 @@ export const CreateProviderModal: React.FC = () => {
   const [createEntity, { data, loading, error }] = useCreateContragentMutation({
     fetchPolicy: 'no-cache',
   });
+  const [createContact, {error: ContactError}] = useCreateContactMutation({
+    fetchPolicy: 'no-cache',
+  });
 
-  const handleFormSubmit = (form: FormProps) =>
-    createEntity({
-      variables: {
-        data: {
-          ...form,
-        },
-      },
-    });
+  const handleFormSubmit = (form: FormProps) => {
+    createContact({ variables: { data: form } }).then((data) =>
+      createEntity({
+        variables: { data: { contact: data.data?.createContact?.data?.id } },
+      })
+    );
+  };
 
   return (
     <Grid
-      width={500}
+    width={'100%'}
+    minWidth={'25vmax'}
       container
       position={'relative'}
       display={'flex'}
@@ -55,7 +62,7 @@ export const CreateProviderModal: React.FC = () => {
         <Typography variant="h5">Добавление контрагента</Typography>
       </Grid>
 
-      {!isEmpty(error) && !loading && (
+      {(!isEmpty(error) || !isEmpty(ContactError)) && !loading && (
         <Stack mt={2} sx={{ width: '100%' }}>
           <Alert severity="error">
             Проверьте правильность указанных данных
@@ -64,7 +71,7 @@ export const CreateProviderModal: React.FC = () => {
       )}
       {isEmpty(error) && !loading && data && (
         <Stack mt={2} sx={{ width: '100%' }}>
-          <Alert severity="success">Продукт успешно создан</Alert>
+          <Alert severity="success">Контрагент успешно создан</Alert>
         </Stack>
       )}
 

@@ -13,6 +13,7 @@ import { useResetPasswordMutation } from 'src/schemas/generated';
 import KeyIcon from '@mui/icons-material/Key';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Routes } from 'src/routes';
+import {useEffect} from 'react'
 
 interface FormValues {
   password: string;
@@ -39,9 +40,16 @@ export const ResetPasswordPage: React.FC = () => {
   });
 
   const handleFormSubmit = (variables: FormValues) =>
+  // Отправка запроса на восстановление пароля
     sendCode({
       variables: { ...variables, code: searchParams.get('code') ?? '' },
     }).then(() => delay(() => navigate(Routes.SIGN_IN), 3000));
+
+  useEffect(()=>{
+    if(!searchParams.get('code')){
+      navigate(Routes.SIGN_IN)
+    }
+  },[navigate, searchParams])
 
   return (
     <AuthLayout>

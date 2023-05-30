@@ -44,7 +44,7 @@ const columns: GridColDef<InvoiceEntity>[] = [
     headerName: 'Поставщик',
     width: 150,
     valueGetter: (params) =>
-      params.row.attributes?.provider?.data?.attributes?.name,
+      params.row.attributes?.provider?.data?.attributes?.contact?.data?.attributes?.name,
   },
   {
     field: 'amount',
@@ -73,7 +73,7 @@ const columns: GridColDef<InvoiceEntity>[] = [
     headerName: 'Контрагент',
     width: 150,
     valueGetter: (params) =>
-      params.row.attributes?.contragent?.data?.attributes?.name,
+      params.row.attributes?.contragent?.data?.attributes?.contact?.data?.attributes?.name,
   },
   {
     field: 'createdAt',

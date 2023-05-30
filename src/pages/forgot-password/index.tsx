@@ -29,6 +29,7 @@ export const ForgotPasswordPage: React.FC = () => {
   });
 
   const handleFormSubmit = (data: FormValues) =>
+  // Отправка запроса сброса пароля
     sendCode({
       variables: { email: data.email },
     });

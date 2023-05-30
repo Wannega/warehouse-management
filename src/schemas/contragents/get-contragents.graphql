@@ -7,12 +7,19 @@ query getContragents(
     data {
       id
       attributes {
-        name
-        category
-        location
-        inn
-        createdAt
-        updatedAt
+        contact {
+          data {
+              id
+            attributes {
+              name
+              category
+              location
+              inn
+              createdAt
+              updatedAt
+            }
+          }
+        }
       }
     }
   }

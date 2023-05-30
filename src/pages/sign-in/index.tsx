@@ -2,8 +2,6 @@ import { Controller, useForm } from 'react-hook-form';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -40,7 +38,6 @@ export const SignInPage: React.FC = () => {
   const navigate = useNavigate();
 
   const {
-    handleSubmit,
     control,
     getValues,
     formState: { errors },
@@ -49,6 +46,7 @@ export const SignInPage: React.FC = () => {
   });
 
   const handleFormSubmit = () => {
+    // Отправка запроса на авторизацию
     signIn({
       variables: {
         input: {
@@ -97,7 +95,7 @@ export const SignInPage: React.FC = () => {
 
             setVisible(true);
 
-            if(isCaptchaPassed){
+            if (isCaptchaPassed) {
               handleFormSubmit();
             }
           }}
@@ -142,18 +140,6 @@ export const SignInPage: React.FC = () => {
               />
             )}
           />
-          <Controller
-            name="rememberMe"
-            control={control}
-            render={({ field: { value, name, onChange } }) => (
-              <FormControlLabel
-                name={name}
-                onChange={onChange}
-                control={<Checkbox value={value} />}
-                label={t('remember-me')}
-              />
-            )}
-          />
           <Button
             type="submit"
             fullWidth
@@ -167,9 +153,9 @@ export const SignInPage: React.FC = () => {
           {isCaptchaVisible && (
             <ReCAPTCHA
               onChange={() => {
-                setPassed(true)
+                setPassed(true);
               }}
-              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              sitekey="6LcPxS4mAAAAALdlPYJU9gsEaQ8oxPzlwAT3HffV"
             />
           )}
           {loading && (

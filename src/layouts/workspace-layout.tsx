@@ -14,7 +14,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Cookies from 'js-cookie';
 import { Link,  useLocation, useNavigate } from 'react-router-dom';
@@ -105,6 +105,11 @@ export const WorkspaceLayout: React.FC<Props> = ({ children, title }) => {
     navigate(Routes.SIGN_IN)
   };
   console.log('rerender');
+
+  useEffect(() =>{
+    document.title = title
+  },[title])
+  
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

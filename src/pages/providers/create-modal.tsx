@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { Controller, useForm } from 'react-hook-form';
-import { useCreateProviderMutation } from 'src/schemas/generated';
+import { useCreateContactMutation, useCreateProviderMutation } from 'src/schemas/generated';
 
 interface FormProps {
   name: string;
@@ -31,19 +31,23 @@ export const CreateProviderModal: React.FC = () => {
   const [createEntity, { data, loading, error }] = useCreateProviderMutation({
     fetchPolicy: 'no-cache',
   });
+  const [createContact, {error: contactError}] = useCreateContactMutation({
+    fetchPolicy: 'no-cache',
+  });
 
-  const handleFormSubmit = (form: FormProps) =>
-    createEntity({
-      variables: {
-        data: {
-          ...form,
-        },
-      },
-    });
+
+  const handleFormSubmit = (form: FormProps) => {
+    createContact({ variables: { data: form } }).then((data) =>
+      createEntity({
+        variables: { data: { contact: data.data?.createContact?.data?.id } },
+      })
+    );
+  };
 
   return (
     <Grid
-      width={500}
+      width={'100%'}
+      minWidth={'25vmax'}
       container
       position={'relative'}
       display={'flex'}
@@ -55,7 +59,7 @@ export const CreateProviderModal: React.FC = () => {
         <Typography variant="h5">Добавление поставщика</Typography>
       </Grid>
 
-      {!isEmpty(error) && !loading && (
+      {(!isEmpty(error) || !isEmpty(contactError)) && !loading && (
         <Stack mt={2} sx={{ width: '100%' }}>
           <Alert severity="error">
             Проверьте правильность указанных данных
@@ -64,7 +68,7 @@ export const CreateProviderModal: React.FC = () => {
       )}
       {isEmpty(error) && !loading && data && (
         <Stack mt={2} sx={{ width: '100%' }}>
-          <Alert severity="success">Продукт успешно создан</Alert>
+          <Alert severity="success">Поставщик успешно создан</Alert>
         </Stack>
       )}
 
@@ -103,7 +107,7 @@ export const CreateProviderModal: React.FC = () => {
           <TextField
             name={name}
             value={value}
-            type="number"
+            type="text"
             onChange={onChange}
             id="outlined-select-currency"
             label="ИНН"
@@ -118,7 +122,7 @@ export const CreateProviderModal: React.FC = () => {
           <TextField
             name={name}
             value={value}
-            type="number"
+            type="text"
             onChange={onChange}
             id="outlined-select-currency"
             label="Категория"

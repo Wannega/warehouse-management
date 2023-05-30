@@ -14,7 +14,13 @@ query getInvoices(
           data {
             id
             attributes {
-              name
+              contact{
+                data{
+                  attributes{
+                    name
+                  }
+                }
+              }
             }
           }
         }
@@ -22,7 +28,13 @@ query getInvoices(
           data {
             id
             attributes {
-              name
+              contact{
+                data{
+                  attributes{
+                    name
+                  }
+                }
+              }
             }
           }
         }

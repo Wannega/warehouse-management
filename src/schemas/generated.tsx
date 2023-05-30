@@ -42,13 +42,57 @@ export type BooleanFilterInput = {
   startsWith?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type Contragent = {
-  __typename?: 'Contragent';
+export type Contact = {
+  __typename?: 'Contact';
   category?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   inn?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type ContactEntity = {
+  __typename?: 'ContactEntity';
+  attributes?: Maybe<Contact>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type ContactEntityResponse = {
+  __typename?: 'ContactEntityResponse';
+  data?: Maybe<ContactEntity>;
+};
+
+export type ContactEntityResponseCollection = {
+  __typename?: 'ContactEntityResponseCollection';
+  data: Array<ContactEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type ContactFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
+  category?: InputMaybe<StringFilterInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  inn?: InputMaybe<StringFilterInput>;
+  location?: InputMaybe<StringFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<ContactFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type ContactInput = {
+  category?: InputMaybe<Scalars['String']>;
+  inn?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type Contragent = {
+  __typename?: 'Contragent';
+  contact?: Maybe<ContactEntityResponse>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -71,22 +115,16 @@ export type ContragentEntityResponseCollection = {
 
 export type ContragentFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ContragentFiltersInput>>>;
-  category?: InputMaybe<StringFilterInput>;
+  contact?: InputMaybe<ContactFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
-  inn?: InputMaybe<StringFilterInput>;
-  location?: InputMaybe<StringFilterInput>;
-  name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ContragentFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ContragentFiltersInput>>>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type ContragentInput = {
-  category?: InputMaybe<Scalars['String']>;
-  inn?: InputMaybe<Scalars['String']>;
-  location?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
+  contact?: InputMaybe<Scalars['ID']>;
 };
 
 export type DateTimeFilterInput = {
@@ -143,7 +181,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = Contragent | I18NLocale | Invoice | Provider | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Contact | Contragent | I18NLocale | Invoice | Provider | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -313,6 +351,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Change user password. Confirm with the current password. */
   changePassword?: Maybe<UsersPermissionsLoginPayload>;
+  createContact?: Maybe<ContactEntityResponse>;
   createContragent?: Maybe<ContragentEntityResponse>;
   createInvoice?: Maybe<InvoiceEntityResponse>;
   createProvider?: Maybe<ProviderEntityResponse>;
@@ -322,6 +361,7 @@ export type Mutation = {
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
   /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  deleteContact?: Maybe<ContactEntityResponse>;
   deleteContragent?: Maybe<ContragentEntityResponse>;
   deleteInvoice?: Maybe<InvoiceEntityResponse>;
   deleteProvider?: Maybe<ProviderEntityResponse>;
@@ -342,6 +382,7 @@ export type Mutation = {
   removeFile?: Maybe<UploadFileEntityResponse>;
   /** Reset user password. Confirm with a code (resetToken from forgotPassword) */
   resetPassword?: Maybe<UsersPermissionsLoginPayload>;
+  updateContact?: Maybe<ContactEntityResponse>;
   updateContragent?: Maybe<ContragentEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateInvoice?: Maybe<InvoiceEntityResponse>;
@@ -360,6 +401,11 @@ export type MutationChangePasswordArgs = {
   currentPassword: Scalars['String'];
   password: Scalars['String'];
   passwordConfirmation: Scalars['String'];
+};
+
+
+export type MutationCreateContactArgs = {
+  data: ContactInput;
 };
 
 
@@ -395,6 +441,11 @@ export type MutationCreateUsersPermissionsRoleArgs = {
 
 export type MutationCreateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
+};
+
+
+export type MutationDeleteContactArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -473,6 +524,12 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationUpdateContactArgs = {
+  data: ContactInput;
+  id: Scalars['ID'];
+};
+
+
 export type MutationUpdateContragentArgs = {
   data: ContragentInput;
   id: Scalars['ID'];
@@ -546,11 +603,8 @@ export type PaginationArg = {
 
 export type Provider = {
   __typename?: 'Provider';
-  category?: Maybe<Scalars['String']>;
+  contact?: Maybe<ContactEntityResponse>;
   createdAt?: Maybe<Scalars['DateTime']>;
-  inn?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -573,26 +627,22 @@ export type ProviderEntityResponseCollection = {
 
 export type ProviderFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ProviderFiltersInput>>>;
-  category?: InputMaybe<StringFilterInput>;
+  contact?: InputMaybe<ContactFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
-  inn?: InputMaybe<StringFilterInput>;
-  location?: InputMaybe<StringFilterInput>;
-  name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ProviderFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ProviderFiltersInput>>>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type ProviderInput = {
-  category?: InputMaybe<Scalars['String']>;
-  inn?: InputMaybe<Scalars['String']>;
-  location?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
+  contact?: InputMaybe<Scalars['ID']>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  contact?: Maybe<ContactEntityResponse>;
+  contacts?: Maybe<ContactEntityResponseCollection>;
   contragent?: Maybe<ContragentEntityResponse>;
   contragents?: Maybe<ContragentEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
@@ -610,6 +660,18 @@ export type Query = {
   usersPermissionsRoles?: Maybe<UsersPermissionsRoleEntityResponseCollection>;
   usersPermissionsUser?: Maybe<UsersPermissionsUserEntityResponse>;
   usersPermissionsUsers?: Maybe<UsersPermissionsUserEntityResponseCollection>;
+};
+
+
+export type QueryContactArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryContactsArgs = {
+  filters?: InputMaybe<ContactFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1138,6 +1200,21 @@ export type SignInMutationVariables = Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', login: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, username: string, email?: string | null, confirmed?: boolean | null, blocked?: boolean | null, role?: { __typename?: 'UsersPermissionsMeRole', name: string } | null } } };
 
+export type CreateContactMutationVariables = Exact<{
+  data: ContactInput;
+}>;
+
+
+export type CreateContactMutation = { __typename?: 'Mutation', createContact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', id?: string | null } | null } | null };
+
+export type UpdateContactMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data: ContactInput;
+}>;
+
+
+export type UpdateContactMutation = { __typename?: 'Mutation', updateContact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', id?: string | null } | null } | null };
+
 export type CreateContragentMutationVariables = Exact<{
   data: ContragentInput;
 }>;
@@ -1159,7 +1236,7 @@ export type GetContragentsQueryVariables = Exact<{
 }>;
 
 
-export type GetContragentsQuery = { __typename?: 'Query', contragents?: { __typename?: 'ContragentEntityResponseCollection', data: Array<{ __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', name?: string | null, category?: string | null, location?: string | null, inn?: string | null, createdAt?: any | null, updatedAt?: any | null } | null }> } | null };
+export type GetContragentsQuery = { __typename?: 'Query', contragents?: { __typename?: 'ContragentEntityResponseCollection', data: Array<{ __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', contact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', id?: string | null, attributes?: { __typename?: 'Contact', name?: string | null, category?: string | null, location?: string | null, inn?: string | null, createdAt?: any | null, updatedAt?: any | null } | null } | null } | null } | null }> } | null };
 
 export type UpdateContragentMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1192,7 +1269,7 @@ export type GetInvoicesQueryVariables = Exact<{
 }>;
 
 
-export type GetInvoicesQuery = { __typename?: 'Query', invoices?: { __typename?: 'InvoiceEntityResponseCollection', data: Array<{ __typename?: 'InvoiceEntity', id?: string | null, attributes?: { __typename?: 'Invoice', amount?: number | null, article?: string | null, delivered?: boolean | null, createdAt?: any | null, deliveryDate?: any | null, name?: string | null, provider?: { __typename?: 'ProviderEntityResponse', data?: { __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', name?: string | null } | null } | null } | null, contragent?: { __typename?: 'ContragentEntityResponse', data?: { __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
+export type GetInvoicesQuery = { __typename?: 'Query', invoices?: { __typename?: 'InvoiceEntityResponseCollection', data: Array<{ __typename?: 'InvoiceEntity', id?: string | null, attributes?: { __typename?: 'Invoice', amount?: number | null, article?: string | null, delivered?: boolean | null, createdAt?: any | null, deliveryDate?: any | null, name?: string | null, provider?: { __typename?: 'ProviderEntityResponse', data?: { __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', contact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', attributes?: { __typename?: 'Contact', name?: string | null } | null } | null } | null } | null } | null } | null, contragent?: { __typename?: 'ContragentEntityResponse', data?: { __typename?: 'ContragentEntity', id?: string | null, attributes?: { __typename?: 'Contragent', contact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', attributes?: { __typename?: 'Contact', name?: string | null } | null } | null } | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
 export type UpdateInvoiceMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1223,7 +1300,7 @@ export type GetProvidersQueryVariables = Exact<{
 }>;
 
 
-export type GetProvidersQuery = { __typename?: 'Query', providers?: { __typename?: 'ProviderEntityResponseCollection', data: Array<{ __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', name?: string | null, category?: string | null, location?: string | null, inn?: string | null, createdAt?: any | null, updatedAt?: any | null } | null }> } | null };
+export type GetProvidersQuery = { __typename?: 'Query', providers?: { __typename?: 'ProviderEntityResponseCollection', data: Array<{ __typename?: 'ProviderEntity', id?: string | null, attributes?: { __typename?: 'Provider', contact?: { __typename?: 'ContactEntityResponse', data?: { __typename?: 'ContactEntity', id?: string | null, attributes?: { __typename?: 'Contact', name?: string | null, category?: string | null, location?: string | null, inn?: string | null, createdAt?: any | null, updatedAt?: any | null } | null } | null } | null } | null }> } | null };
 
 export type UpdateProviderMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1390,6 +1467,77 @@ export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignI
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const CreateContactDocument = gql`
+    mutation createContact($data: ContactInput!) {
+  createContact(data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type CreateContactMutationFn = Apollo.MutationFunction<CreateContactMutation, CreateContactMutationVariables>;
+
+/**
+ * __useCreateContactMutation__
+ *
+ * To run a mutation, you first call `useCreateContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createContactMutation, { data, loading, error }] = useCreateContactMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateContactMutation(baseOptions?: Apollo.MutationHookOptions<CreateContactMutation, CreateContactMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateContactMutation, CreateContactMutationVariables>(CreateContactDocument, options);
+      }
+export type CreateContactMutationHookResult = ReturnType<typeof useCreateContactMutation>;
+export type CreateContactMutationResult = Apollo.MutationResult<CreateContactMutation>;
+export type CreateContactMutationOptions = Apollo.BaseMutationOptions<CreateContactMutation, CreateContactMutationVariables>;
+export const UpdateContactDocument = gql`
+    mutation updateContact($id: ID!, $data: ContactInput!) {
+  updateContact(id: $id, data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type UpdateContactMutationFn = Apollo.MutationFunction<UpdateContactMutation, UpdateContactMutationVariables>;
+
+/**
+ * __useUpdateContactMutation__
+ *
+ * To run a mutation, you first call `useUpdateContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateContactMutation, { data, loading, error }] = useUpdateContactMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateContactMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContactMutation, UpdateContactMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateContactMutation, UpdateContactMutationVariables>(UpdateContactDocument, options);
+      }
+export type UpdateContactMutationHookResult = ReturnType<typeof useUpdateContactMutation>;
+export type UpdateContactMutationResult = Apollo.MutationResult<UpdateContactMutation>;
+export type UpdateContactMutationOptions = Apollo.BaseMutationOptions<UpdateContactMutation, UpdateContactMutationVariables>;
 export const CreateContragentDocument = gql`
     mutation createContragent($data: ContragentInput!) {
   createContragent(data: $data) {
@@ -1466,12 +1614,19 @@ export const GetContragentsDocument = gql`
     data {
       id
       attributes {
-        name
-        category
-        location
-        inn
-        createdAt
-        updatedAt
+        contact {
+          data {
+            id
+            attributes {
+              name
+              category
+              location
+              inn
+              createdAt
+              updatedAt
+            }
+          }
+        }
       }
     }
   }
@@ -1626,7 +1781,13 @@ export const GetInvoicesDocument = gql`
           data {
             id
             attributes {
-              name
+              contact {
+                data {
+                  attributes {
+                    name
+                  }
+                }
+              }
             }
           }
         }
@@ -1634,7 +1795,13 @@ export const GetInvoicesDocument = gql`
           data {
             id
             attributes {
-              name
+              contact {
+                data {
+                  attributes {
+                    name
+                  }
+                }
+              }
             }
           }
         }
@@ -1796,12 +1963,19 @@ export const GetProvidersDocument = gql`
     data {
       id
       attributes {
-        name
-        category
-        location
-        inn
-        createdAt
-        updatedAt
+        contact {
+          data {
+            id
+            attributes {
+              name
+              category
+              location
+              inn
+              createdAt
+              updatedAt
+            }
+          }
+        }
       }
     }
   }

@@ -44,15 +44,15 @@ export const CreateProductModal: React.FC = () => {
   const { data: contragents } = useGetContragentsQuery({
     // Тело запроса
     variables: {
-      filters: { name: { contains: '' } },
+      filters: {contact: { name: { contains: '' }} },
       pag: { page: 1, pageSize: 500 },
-    },
+    },fetchPolicy: 'no-cache'
   });
   const { data: providers } = useGetProvidersQuery({
     variables: {
-      filters: { name: { contains: '' } },
+      filters: {contact: { name: { contains: '' }} },
       pag: { page: 1, pageSize: 500 },
-    },
+    },fetchPolicy: 'no-cache'
   });
 
   const handleFormSubmit = (form: FormProps) =>
@@ -66,21 +66,24 @@ export const CreateProductModal: React.FC = () => {
           deliveryDate: form.deliveryDate,
           contragent:
             contragents?.contragents?.data.find(
-              (item) => item.attributes?.name === form.contragent
+              (item) => item.attributes?.contact?.data?.attributes?.name === form.contragent
             )?.id ?? '',
           provider:
           // Поиск по поставщикам
             providers?.providers?.data.find(
-              (item) => item.attributes?.name === form.provider
+              (item) => item.attributes?.contact?.data?.attributes?.name === form.provider
             )?.id ?? '',
         },
       },
     });
 
+    console.log(providers)
+
   return (
     <Grid
-      width={500}
+    width={'100%'}
       container
+      minWidth={'25vmax'}
       position={'relative'}
       display={'flex'}
       flexDirection={'column'}
@@ -127,8 +130,8 @@ export const CreateProductModal: React.FC = () => {
             value={value}
             onChange={onChange}
             id="outlined-select-currency"
-            label="Артикль"
-            helperText="Введите артикль продукта"
+            label="Артикул"
+            helperText="Введите артикул продукта"
           ></TextField>
         )}
       />
@@ -156,7 +159,7 @@ export const CreateProductModal: React.FC = () => {
             onChange={(_, value) => setValue('contragent', value ?? '')}
             options={
               contragents?.contragents?.data.map(
-                (item) => item.attributes?.name
+                (item) => item.attributes?.contact?.data?.attributes?.name
               ) ?? []
             }
             renderInput={(params) => (
@@ -180,7 +183,7 @@ export const CreateProductModal: React.FC = () => {
             value={value}
             onChange={(_, value) => setValue('provider', value ?? '')}
             options={
-              providers?.providers?.data.map((item) => item.attributes?.name) ??
+              providers?.providers?.data.map((item) => item.attributes?.contact?.data?.attributes?.name) ??
               []
             }
             renderInput={(params) => (

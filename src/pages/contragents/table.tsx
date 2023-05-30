@@ -14,14 +14,14 @@ import {
   ContragentEntity,
   useDeleteContragentMutation,
   useGetContragentsQuery,
-  useUpdateContragentMutation,
+  useUpdateContactMutation,
 } from 'src/schemas/generated';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 
-import { CreateProviderModal } from './create-modal';
+import { CreateContragentsModal } from './create-modal';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { isNil, omit, omitBy, pick } from 'lodash';
+import { isNil, omit, omitBy } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columns: GridColDef<ContragentEntity>[] = [
@@ -31,28 +31,32 @@ const columns: GridColDef<ContragentEntity>[] = [
     headerName: 'Имя',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.name,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.name,
   },
   {
     field: 'location',
     headerName: 'Адрес',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.location,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.location,
   },
   {
     field: 'inn',
     headerName: 'ИНН',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.inn,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.inn,
   },
   {
     field: 'category',
     headerName: 'Категория',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.category,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.category,
   },
 ];
 
@@ -63,7 +67,7 @@ export default function ContragentsTable() {
 
   const { data, called, loading, refetch, reobserve } = useGetContragentsQuery({
     variables: {
-      filters: { name: { contains: '' } },
+      filters: { contact: { name: { contains: '' } } },
       pag: { page: 1, pageSize: 500 },
     },
     fetchPolicy: 'no-cache',
@@ -72,7 +76,7 @@ export default function ContragentsTable() {
   const [deleteEntity] = useDeleteContragentMutation({
     fetchPolicy: 'no-cache',
   });
-  const [updateEntity] = useUpdateContragentMutation({
+  const [updateEntity] = useUpdateContactMutation({
     fetchPolicy: 'no-cache',
   });
 
@@ -87,7 +91,7 @@ export default function ContragentsTable() {
       })
     );
     refetch();
-    reobserve()
+    reobserve();
   };
 
   const handleUpdate = (
@@ -98,17 +102,16 @@ export default function ContragentsTable() {
       'attributes',
       '__typename',
       'id',
-    ]); // {b: 'Hello', c: 3}
-
-    console.log(update);
+    ]);
+    console.log(params);
     updateEntity({
       variables: {
-        id: params.id ?? '',
+        id: params?.attributes?.contact?.data?.id ?? '',
         data: update,
       },
     });
     refetch();
-    reobserve()
+    reobserve();
   };
 
   useEffect(() => {
@@ -130,7 +133,7 @@ export default function ContragentsTable() {
     <Box sx={{ width: '100%' }}>
       <Dialog onClose={toggleModal} open={open}>
         <DialogContent>
-          <CreateProviderModal />
+          <CreateContragentsModal />
         </DialogContent>
       </Dialog>
       <Grid

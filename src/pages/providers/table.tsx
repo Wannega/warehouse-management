@@ -14,6 +14,7 @@ import {
   ProviderEntity,
   useDeleteProviderMutation,
   useGetProvidersQuery,
+  useUpdateContactMutation,
   useUpdateProviderMutation,
 } from 'src/schemas/generated';
 import AddIcon from '@mui/icons-material/Add';
@@ -31,14 +32,16 @@ const columns: GridColDef<ProviderEntity>[] = [
     headerName: 'Имя',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.name,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.name,
   },
   {
     field: 'location',
     headerName: 'Адрес',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.location,
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.location,
   },
   {
     field: 'inn',
@@ -46,15 +49,16 @@ const columns: GridColDef<ProviderEntity>[] = [
     width: 200,
     editable: true,
     valueGetter: (params) =>
-      params.row.attributes?.inn,
+      params.row.attributes?.contact?.data?.attributes?.inn,
   },
   {
     field: 'category',
     headerName: 'Категория',
     width: 200,
     editable: true,
-    valueGetter: (params) => params.row.attributes?.category,
-  }
+    valueGetter: (params) =>
+      params.row.attributes?.contact?.data?.attributes?.category,
+  },
 ];
 
 export default function ProvidersTable() {
@@ -64,20 +68,21 @@ export default function ProvidersTable() {
 
   const { data, called, loading, refetch } = useGetProvidersQuery({
     variables: {
-      filters: { name: { contains: '' } },
+      filters: { contact: { name: { contains: '' } } },
       pag: { page: 1, pageSize: 500 },
     },
     fetchPolicy: 'no-cache',
   });
 
   const [deleteEntity] = useDeleteProviderMutation({ fetchPolicy: 'no-cache' });
-  const [updateEntity] = useUpdateProviderMutation({ fetchPolicy: 'no-cache' });
+  const [updateEntity] = useUpdateContactMutation({ fetchPolicy: 'no-cache' });
 
   const handleDelete = () => {
     selected.map((number) =>
       deleteEntity({
         variables: {
-          id: data?.providers?.data.find((item) => item.id === number)?.id ?? '',
+          id:
+            data?.providers?.data.find((item) => item.id === number)?.id ?? '',
         },
       })
     );
@@ -88,14 +93,16 @@ export default function ProvidersTable() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: GridCellEditStopParams<any, any, any>['row']
   ) => {
-    const update = omit(omitBy(params,
-      isNil
-    ), ['attributes', '__typename', 'id']);  // {b: 'Hello', c: 3}
+    const update = omit(omitBy(params, isNil), [
+      'attributes',
+      '__typename',
+      'id',
+    ]); // {b: 'Hello', c: 3}
 
     console.log(update);
     updateEntity({
       variables: {
-        id: params.id ?? '',
+        id: params?.attributes?.contact?.data?.id ?? '',
         data: update,
       },
     });
